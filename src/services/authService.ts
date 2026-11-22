@@ -23,8 +23,8 @@ export const issueSession = (res: Response, user: IUser) => {
   );
   res.cookie("fintrack_token", token, {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax",
+     secure: env.NODE_ENV === "production",
+     sameSite: env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: env.JWT_COOKIE_EXPIRES_IN * 86400000,
   });
   return token;
