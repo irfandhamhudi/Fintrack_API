@@ -5,7 +5,8 @@ import * as helmetModule from "helmet";
 import morgan from "morgan";
 
 type HelmetMiddleware = (options?: Record<string, unknown>) => import("express").RequestHandler;
-const helmet = ((helmetModule as unknown as { default?: HelmetMiddleware }).default ?? helmetModule) as HelmetMiddleware;
+const helmetFactory = Reflect.get(helmetModule, "default") as HelmetMiddleware;
+const helmetMiddleware = helmetFactory();
 import { env } from "./config/env.js";
 import routes from "./routes/index.js";
 import { apiLimiter } from "./middleware/rateLimiter.js";
@@ -13,7 +14,7 @@ import { errorMiddleware } from "./middleware/errorMiddleware.js";
 
 export const app = express();
 app.set("trust proxy", 1);
-app.use(helmet());
+app.use(helmetMiddleware);
 app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
