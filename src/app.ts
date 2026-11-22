@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import helmet from "helmet";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const helmet = require("helmet") as (options?: Record<string, unknown>) => import("express").RequestHandler;
 import morgan from "morgan";
 import { env } from "./config/env.js";
 import routes from "./routes/index.js";
