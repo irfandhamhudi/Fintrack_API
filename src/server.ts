@@ -5,12 +5,13 @@ import { startRecurringWorker } from "./services/recurringService.js";
 
 const start = async () => {
   await connectDatabase();
-  startRecurringWorker();
+  if (env.NODE_ENV !== "production") startRecurringWorker();
   app.listen(env.PORT, () =>
     console.log(`FinTrack API running on port ${env.PORT}`),
   );
 };
-start().catch((error) => {
+
+void start().catch((error) => {
   console.error("Failed to start server", error);
   process.exit(1);
 });
