@@ -1,10 +1,11 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { createRequire } from "node:module";
-const require = createRequire(import.meta.url);
-const helmet = require("helmet") as (options?: Record<string, unknown>) => import("express").RequestHandler;
+import * as helmetModule from "helmet";
 import morgan from "morgan";
+
+type HelmetMiddleware = (options?: Record<string, unknown>) => import("express").RequestHandler;
+const helmet = ((helmetModule as unknown as { default?: HelmetMiddleware }).default ?? helmetModule) as HelmetMiddleware;
 import { env } from "./config/env.js";
 import routes from "./routes/index.js";
 import { apiLimiter } from "./middleware/rateLimiter.js";
