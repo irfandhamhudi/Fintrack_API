@@ -7,9 +7,6 @@ let databaseConnection: Promise<void> | null = null;
 const handler = async (req: VercelRequest, res: VercelResponse) => {
   databaseConnection ??= connectDatabase();
   await databaseConnection;
-  if (req.url?.startsWith("/api/")) {
-    req.url = req.url.slice(4) || "/";
-  }
   return app(req, res);
 };
 
