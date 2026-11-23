@@ -21,7 +21,7 @@ export const requireAuth = async (
     const bearer = req.headers.authorization?.startsWith("Bearer ")
       ? req.headers.authorization.slice(7)
       : undefined;
-    const token = req.cookies.fintrack_token ?? bearer;
+    const token = bearer ?? req.cookies.fintrack_token;
     if (!token) throw new AppError(401, "Autentikasi diperlukan.");
     const payload = jwt.verify(token, env.JWT_SECRET) as { sub?: string };
     if (!payload.sub || !(await User.exists({ _id: payload.sub })))
