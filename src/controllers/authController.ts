@@ -22,16 +22,16 @@ export const registerController = asyncHandler(
       .extend({ name: z.string().min(2) })
       .parse(req.body);
     const user = await register(input.name, input.email, input.password);
-    issueSession(res, user);
-    sendSuccess(res, { user: publicUser(user) }, "Registrasi berhasil", 201);
+  const token = issueSession(res, user);
+  sendSuccess(res, { user: publicUser(user), token }, "Registrasi berhasil", 201);
   },
 );
 export const loginController = asyncHandler(
   async (req: Request, res: Response) => {
     const input = credentials.omit({ name: true }).parse(req.body);
     const user = await authenticate(input.email, input.password);
-    issueSession(res, user);
-    sendSuccess(res, { user: publicUser(user) }, "Login berhasil");
+  const token = issueSession(res, user);
+  sendSuccess(res, { user: publicUser(user), token }, "Login berhasil");
   },
 );
 export const logoutController = asyncHandler(async (_req, res) => {
